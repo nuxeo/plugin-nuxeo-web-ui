@@ -63,7 +63,7 @@
     "marked-element": "git://github.com/PolymerElements/marked-element.git#1.1.1",
     "moment": "https://github.com/moment/moment.git#2.10.6",
     "neon-animation": "git://github.com/polymerelements/neon-animation.git#1.2.4",
-    "nuxeo": "https://github.com/nuxeo/nuxeo-js-client.git#2.1.1",
+    "nuxeo": "https://github.com/nuxeo/nuxeo-js-client.git#2.2.0",
     "nuxeo-dataviz-elements": "git://github.com/nuxeo/nuxeo-dataviz-elements.git#master",
     "nuxeo-elements": "git://github.com/nuxeo/nuxeo-elements.git#master",
     "nuxeo-ui-elements": "git://github.com/nuxeo/nuxeo-ui-elements.git#master",
