@@ -4,19 +4,26 @@
   "scripts": {
     "lint": "eslint scripts test",
     "test": "scripts/test.js",
-    "test:dev": "NUXEO_URL=http://localhost:8080/nuxeo chimp config/chimp.js --webdriverio.baseUrl=http://localhost:5000",
+    "test:dev": "NUXEO_URL=http://localhost:8080/nuxeo wdio -b http://localhost:5000",
     "test:watch": "chimp config/chimp.js --watch"
   },
   "license": "Apache-2.0",
-  "devDependencies": {
+  "dependencies": {
+    "babel-preset-es2015": "^6.18.0",
+    "babel-register": "~6.14.0",
     "chai": "^3.5.0",
-    "chimp": "^0.41.1",
+    "cucumber": "~1.3.1",
     "cucumber-junit": "^1.6.0",
+    "mkdirp": "^0.5.1",
+    "nuxeo": "~1.1.1",
+    "wdio-cucumber-framework": "^0.2.15",
+    "wdio-selenium-standalone-service": "^0.0.7",
+    "wdio-spec-reporter": "^0.0.3",
+    "webdriverio": "^4.5.0"
+  },
+  "devDependencies": {
     "eslint": "^1.10.3",
     "eslint-config-airbnb": "^5.0.1",
-    "mkdirp": "^0.5.1"
-  },
-  "dependencies": {
-    "nuxeo": "~1.1.1"
+    "selenium-standalone": "~5.9.1"
   }
 }
