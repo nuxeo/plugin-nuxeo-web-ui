@@ -21,7 +21,7 @@ export default class Browser {
     return this._section('permissions').element('nuxeo-document-permissions');
   }
 
-  get breadcumb() {
+  get breadcrumb() {
     this.page.element('nuxeo-breadcrumb');
   }
 
