@@ -99,4 +99,8 @@ export default class Browser {
     return true;
   }
 
+  hasContent(title) {
+    // TODO check there is a document with title in the main content container
+  }
+
 }

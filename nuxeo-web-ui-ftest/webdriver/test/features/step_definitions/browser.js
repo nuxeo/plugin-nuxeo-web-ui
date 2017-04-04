@@ -12,4 +12,7 @@ module.exports = function () {
   });
 
   this.Then('I can see the "$title" document', (title) => this.ui.browser.hasTitle(title).should.be.true);
+
+  this.Then('I can see that "$title" is content of the document',
+   (title) => this.ui.browser.hasContent(title).should.be.true);
 };
