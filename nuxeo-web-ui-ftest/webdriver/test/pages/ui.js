@@ -7,11 +7,32 @@ import Drawer from './ui/drawer';
 import Home from './ui/home';
 import Administration from './ui/administration.js';
 import BasePage from './base';
+import ActivityFeed from './ui/activity_feed';
+import HistoryTable from './ui/history_table';
 
 export default class UI extends BasePage {
 
   goHome() {
     this.drawer.logo.click();
+  }
+
+  reload() {
+    driver.refresh();
+  }
+
+  get vocabularyAdmin() {
+    if (!browser.getUrl().endsWith('vocabulary-management')) {
+      driver.url(process.env.NUXEO_URL ? '/#!/admin/vocabulary-management' : '/ui/#!/admin/vocabulary-management');
+    }
+    return new Vocabulary('nuxeo-vocabulary-management');
+  }
+
+  get activityFeed() {
+    return new ActivityFeed('nuxeo-document-activity');
+  }
+
+  get historyTable() {
+    return new HistoryTable('nuxeo-document-history');
   }
 
   get createDialog() {
@@ -21,6 +42,10 @@ export default class UI extends BasePage {
 
   get createButton() {
     return this.el.element('#createBtn');
+  }
+
+  get adminButton() {
+    return this.el.element('nuxeo-menu-icon[name="administration"]');
   }
 
   get drawer() {
@@ -62,6 +87,10 @@ export default class UI extends BasePage {
 
   get tasks() {
     return this.pages.element('nuxeo-tasks');
+  }
+
+  get tasksDashboard() {
+    return this.pages.element('#tasks-dashboard');
   }
 
   get isConnectionActive() {

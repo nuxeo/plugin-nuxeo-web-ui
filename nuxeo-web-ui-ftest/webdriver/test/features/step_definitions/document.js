@@ -48,7 +48,11 @@ module.exports = function () {
     this.ui.browser.documentPage(docType).metadata.waitForVisible();
     table.rows().forEach((row) => {
       this.ui.browser.documentPage(docType).metadata.layout().waitForVisible();
-      this.ui.browser.documentPage(docType).metadata.layout().getFieldValue(row[0]).should.equal(row[1]);
+      if (row[0] == 'subjects') {
+        this.ui.browser.documentPage(docType).metadata.layout().getFieldValue(row[0]).should.include(row[1]);
+      } else {
+        this.ui.browser.documentPage(docType).metadata.layout().getFieldValue(row[0]).should.equal(row[1]);
+      }
     });
   });
 
@@ -72,17 +76,10 @@ module.exports = function () {
     page.editButton.waitForVisible();
     page.editButton.click();
     page.edit.waitForVisible();
-    table.rows().forEach((row) => {
-      page.edit.layout().waitForVisible();
-      page.edit.layout().setFieldValue(row[0], row[1]);
-    });
+    page.edit.layout().waitForVisible();
+    page.edit.layout().fillMultipleValues(table);
     page.saveButton.waitForVisible();
     page.saveButton.click();
-    page.metadata.waitForVisible();
-    table.rows().forEach((row) => {
-      page.metadata.layout().waitForVisible();
-      page.metadata.layout().getFieldValue(row[0]).should.equal(row[1]);
-    });
   });
 
   this.Given(/^I have a (.+) Note$/, (format) => {

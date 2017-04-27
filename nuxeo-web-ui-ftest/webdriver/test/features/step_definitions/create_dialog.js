@@ -18,14 +18,9 @@ module.exports = function () {
 
   this.When(/^I create a document with the following properties:$/, (table) => {
     this.ui.createDialog.documentCreate.waitForVisible();
-    let title = '';
-    table.rows().forEach((row) => {
-      this.ui.createDialog.documentCreate.layout(currentDocType).setFieldValue(row[0], row[1]);
-      if (row[0] === 'title') {
-        title = row[1];
-      }
-    });
-    title.should.not.be.empty;
+    this.ui.createDialog.documentCreate.layout(currentDocType).fillMultipleValues(table);
+    this.ui.createDialog.documentCreate.layout(currentDocType).getField('title').should.not.be.empty;
+    let title = this.ui.createDialog.documentCreate.layout(currentDocType).getFieldValue('title');
     this.ui.createDialog.createButton.waitForVisible();
     this.ui.createDialog.createButton.click();
     this.ui.browser.hasTitle(title).should.be.true;
