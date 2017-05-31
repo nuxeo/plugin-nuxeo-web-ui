@@ -1,23 +1,18 @@
 <package type="addon" name="nuxeo-web-ui" version="@VERSION@">
   <title>Nuxeo Web UI</title>
   <description>
-    <p>Web UI is the new UI for Nuxeo Server. Thanks to its great flexibility, it is the ideal start for any Digital Asset Management, Case Management and Document Management project. You will be able to implement your process, file your content and provide to your users meaningful ways of accessing it. Web UI is made with great client side web technology and adopts most recent standards of the Web.```
-</p>
+    <p>Web UI is the new UI for Nuxeo Server. Thanks to its great flexibility, it is the ideal start for any Digital Asset Management, Case Management and Document Management project. You will be able to implement your process, file your content and provide to your users meaningful ways of accessing it. Web UI is made with great client side web technology and adopts most recent standards of the Web.</p>
   </description>
   <home-page>https://github.com/nuxeo/nuxeo-web-ui</home-page>
   <vendor>Nuxeo</vendor>
   <installer restart="true" />
   <uninstaller restart="true" />
   <nuxeo-validation>nuxeo_certified</nuxeo-validation>
-  <production-state>proto</production-state>
-  <supported>false</supported>
+  <production-state>production_ready</production-state>
+  <supported>true</supported>
   <platforms>
     <platform>server-8.10</platform>
     <platform>server-8.10-*</platform>
-    <platform>server-9.1</platform>
-    <platform>server-9.1-*</platform>
-    <platform>server-9.2</platform>
-    <platform>server-9.2-*</platform>
   </platforms>
   <license>Apache License, Version 2.0</license>
   <license-url>http://www.apache.org/licenses/LICENSE-2.0.html</license-url>
