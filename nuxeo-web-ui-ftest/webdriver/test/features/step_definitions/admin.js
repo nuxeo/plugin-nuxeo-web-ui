@@ -18,6 +18,9 @@ module.exports = function () {
   this.Then('I can see the vocabulary page', () =>
     this.ui.administration.vocabularyManagement.waitForVisible().should.be.true);
 
+  this.Then('I can see the audit page', () =>
+  this.ui.administration.audit.waitForVisible().should.be.true);
+
   this.Then('I can see the cloud services page', () =>
     this.ui.administration.cloudServices.waitForVisible().should.be.true);
 

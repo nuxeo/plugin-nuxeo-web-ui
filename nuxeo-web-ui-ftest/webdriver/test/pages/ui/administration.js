@@ -28,6 +28,10 @@ export default class Administration extends BasePage {
     return this.vocabularyManagement;
   }
 
+  get audit() {
+    return this.el.element('nuxeo-audit');
+  }
+
   get cloudServices() {
     return new CloudServices('nuxeo-cloud-services');
   }
