@@ -1,12 +1,10 @@
 'use strict';
 
 module.exports = function () {
-  this.Given('provider "$provider" exists in providers', (provider) => {
-    fixtures.providers.create({
-      'entity-type': 'nuxeoOAuth2ServiceProvider',
-      serviceName: provider,
-    });
-  });
+  this.Given('provider "$provider" exists in providers', (provider) => fixtures.providers.create({
+    'entity-type': 'nuxeoOAuth2ServiceProvider',
+    serviceName: provider,
+  }));
 
   this.Then('I can see the nuxeo-cloud-providers page', () =>
     this.ui.administration.cloudServices.nuxeoCloudProviders.waitForVisible().should.be.true);
@@ -17,7 +15,7 @@ module.exports = function () {
   this.Then('I can add the following provider:', (provider) => {
     this.ui.administration.cloudServices.addProvider(provider);
     global.providers[provider.rows()[0][1]] = {
-      serviceName: provider.rows()[0][1]
+      serviceName: provider.rows()[0][1],
     };
   });
 
@@ -33,7 +31,7 @@ module.exports = function () {
     this.ui.administration.cloudServices.editProvider(currentName, newDetails);
     delete global.providers[currentName];
     global.providers[newDetails.rows()[0][1]] = {
-      serviceName: newDetails.rows()[0][1]
+      serviceName: newDetails.rows()[0][1],
     };
   });
 

@@ -19,7 +19,7 @@ fixtures.providers = {
     }).catch((response) => {
       if (response.response && response.response.status && response.response.status === 404) {
         params.body = provider;
-        nuxeo.request(`${endPoint}`).post(params).catch((err) => {
+        return nuxeo.request(`${endPoint}`).post(params).catch((err) => {
           throw err;
         }).then((_prov) => {
           global.providers[serviceName] = _prov;
