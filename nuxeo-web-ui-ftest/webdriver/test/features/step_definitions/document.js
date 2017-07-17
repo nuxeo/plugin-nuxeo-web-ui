@@ -60,11 +60,11 @@ module.exports = function () {
   this.Then(/^I can edit the (.*) metadata$/, (docType) => {
     const page = this.ui.browser.documentPage(docType);
     page.metadata.waitForVisible();
-    page.edit.waitForVisible(driver._original.options.waitforTimeout, true).should.be.true;
+    page.edit.waitForVisible(browser.options.waitforTimeout, true).should.be.true;
     page.editButton.waitForVisible();
     page.editButton.click();
     page.edit.waitForVisible();
-    page.metadata.waitForVisible(driver._original.options.waitforTimeout, true).should.be.true;
+    page.metadata.waitForVisible(browser.options.waitforTimeout, true).should.be.true;
     page.edit.title = docType;
     page.saveButton.waitForVisible().should.be.true;
     page.saveButton.click();
