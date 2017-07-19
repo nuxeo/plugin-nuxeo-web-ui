@@ -124,14 +124,20 @@ exports.config = {
   // The only one supported by default is 'dot'
   // see also: http://webdriver.io/guide/testrunner/reporters.html
   //Nice to try: dot, junit, json, spec
-  reporters: ['spec', 'json'],
+  reporters: ['spec', 'json', 'junit'],
 
   reporterOptions: {
     // Configures output from reports
     // see also: https://github.com/fijijavis/wdio-json-reporter
-    outputDir: './target/cucumber-reports/',
-    combined: true,
-    filename: 'report'
+    json :{
+      outputDir: './target/json-reports/',
+      combined: true,
+      filename: 'report'
+    },
+    junit: {
+      outputDir: './target/junit-reports',
+      filename: 'report'
+    }
   },
   //
   // If you are using Cucumber you need to specify the location of your step definitions.
