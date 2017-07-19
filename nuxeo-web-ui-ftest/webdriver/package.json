@@ -6,7 +6,7 @@
     "test": "scripts/test.js",
       "pretest": "npm run lint",
     "test:dev": "NUXEO_URL=http://localhost:8080/nuxeo wdio -b http://localhost:5000",
-      "pretest:dev": "npm run lint",
+      "pretest:dev": "npm run lint"
   },
   "license": "Apache-2.0",
   "devDependencies": {
