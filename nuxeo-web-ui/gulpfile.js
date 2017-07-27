@@ -132,7 +132,13 @@ gulp.task('copy', function() {
     dist('bower_components/select2/select2x2.png')])
       .pipe(gulp.dest(dist('vendor')));
 
-  return merge(application, userGroupManagement, select2);
+  // copy webcomponents polyfills
+  var webcomponentsjs = gulp.src([
+    dist('bower_components/webcomponentsjs/webcomponents.min.js'),
+    dist('bower_components/webcomponentsjs/webcomponents-lite.min.js')])
+      .pipe(gulp.dest(dist('webcomponentsjs')));
+
+  return merge(application, userGroupManagement, select2, webcomponentsjs);
 });
 
 // Scan your HTML for assets & optimize them
