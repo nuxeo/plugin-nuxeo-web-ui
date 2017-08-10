@@ -2,8 +2,8 @@
   "name": "nuxeo-web-ui-addon",
   "private": true,
   "dependencies": {
-    "nuxeo-elements": "nuxeo/nuxeo-elements#1.0.0",
-    "nuxeo-ui-elements": "nuxeo/nuxeo-ui-elements#1.0.0",
-    "nuxeo-web-ui": "nuxeo/nuxeo-web-ui#1.0.0"
+    "nuxeo-elements": "nuxeo/nuxeo-elements#1.0.1",
+    "nuxeo-ui-elements": "nuxeo/nuxeo-ui-elements#1.0.1",
+    "nuxeo-web-ui": "nuxeo/nuxeo-web-ui#1.0.1"
   }
 }
