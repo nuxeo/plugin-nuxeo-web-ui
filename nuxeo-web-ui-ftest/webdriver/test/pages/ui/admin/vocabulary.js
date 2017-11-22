@@ -100,6 +100,10 @@ export default class Vocabulary extends BasePage {
   }
 
   get hasEditDialog() {
+    driver.execute((s) => {
+      var e = document.querySelector(s); // eslint-disable-line no-var
+      e.scrollIntoView();
+    }, `#edit-button-0`);
     driver.waitForVisible(`#edit-button-0`);
     this.el.element(`#edit-button-0`).click();
     driver.waitForVisible(`#dialog`);
