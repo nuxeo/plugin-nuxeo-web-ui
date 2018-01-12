@@ -147,4 +147,11 @@ module.exports = function () {
   this.Then('I add the document to the favorites', () => {
     this.ui.browser.addToFavorites();
   });
+
+  this.Then('I myTag the document', () => {
+    this.ui.browser.myTagDocument();
+  });
+
+  this.Then('I can see the document is tagged with "$tag"', (tag) =>
+    this.ui.browser.hasTag(tag).should.be.true);
 };
