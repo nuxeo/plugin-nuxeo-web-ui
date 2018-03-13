@@ -19,14 +19,23 @@ module.exports = function () {
   this.Then('I can see the users and groups page', () =>
     this.ui.administration.userAndGroupManagement.waitForVisible().should.be.true);
 
-  this.Then('I can see the vocabulary page', () =>
-    this.ui.administration.vocabularyManagement.waitForVisible().should.be.true);
+  this.Then('I can see the vocabulary page', () => {
+    const voca = this.ui.vocabularyManagement;
+    voca.waitForVisible();
+    voca.vocabularyManagement.waitForVisible();
+  });
 
   this.Then('I can see the audit page', () =>
   this.ui.administration.audit.waitForVisible().should.be.true);
 
-  this.Then('I can see the cloud services page', () =>
-    this.ui.administration.cloudServices.waitForVisible().should.be.true);
+  this.Then('I can see the cloud services page', () => {
+    const admin = this.ui.administration;
+    console.log('Got admin');
+    admin.waitForVisible();
+    console.log('Got admin visible');
+    admin.cloudServices.waitForVisible();
+    console.log('Got cloud services visible');
+  });
 
   this.Given('I am on cloud services page', () =>
     this.ui.administration.goToCloudServices());

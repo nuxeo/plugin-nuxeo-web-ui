@@ -1,3 +1,4 @@
+@watch
 Feature: Cloud Services
 
   Cloud providers can be added, edit and removed.
