@@ -1,6 +1,13 @@
 'use strict';
 
 module.exports = function () {
+  this.Then('I myTag the document', () => {
+    this.ui.browser.myTagDocument();
+  });
+
+  this.Then('I can see the document is tagged with "$tag"', (tag) =>
+    this.ui.browser.hasTag(tag).should.be.true);
+
   this.Given(/^I have a (.*) document$/, (docType) => {
     docType = docType || 'File';
     const doc = fixtures.documents.init(docType);
