@@ -10,6 +10,28 @@ import Results from './results';
 
 export default class Browser extends BasePage {
 
+  myTagDocument() {
+    this.el.element(`nuxeo-my-tag-action paper-icon-button`).click();
+  }
+
+  hasTag(tag) {
+    const page = this.el;
+    page.waitUntil(() => {
+      if (!page.isExisting(`nuxeo-tag-suggestion`)) {
+        return false;
+      }
+      try {
+        const tagWidget = page.element(`nuxeo-tag-suggestion`);
+        const tags =
+          tagWidget.elements('.selectivity-multiple-selected-item').value;
+        return tags.some((t) => t.getText().trim() === tag);
+      } catch (e) {
+        return false;
+      }
+    }, `The document does not have the tag`);
+    return true;
+  }
+
   documentPage(docType) {
     const page = fixtures.layouts.page[docType] || 'nuxeo-document-page';
     if (page === `nuxeo-collapsible-document-page`) {
