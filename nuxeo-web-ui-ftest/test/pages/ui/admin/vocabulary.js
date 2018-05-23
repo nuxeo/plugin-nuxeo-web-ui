@@ -117,6 +117,7 @@ export default class Vocabulary extends BasePage {
     dialog.waitForVisible(`#parentDialog paper-button[name="close"]`);
     dialog.element(`#parentDialog paper-button[name="close"]`).click();
     dialog.waitForVisible(`paper-button[name="cancel"]`);
+    dialog.scrollIntoView(`paper-button[name="cancel"]`);
     dialog.element(`paper-button[name="cancel"]`).click();
     return allFieldVisible;
   }
