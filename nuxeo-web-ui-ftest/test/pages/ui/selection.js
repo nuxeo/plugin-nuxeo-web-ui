@@ -39,7 +39,7 @@ export default class Selection extends BasePage {
 
   get trashDocumentsButton() {
     // XXX: using a more specific selector here to ensure we can check for isExisting()
-    return this.el.element('nuxeo-delete-documents-button #deleteAllButton');
+    return this.el.element('nuxeo-trash-documents-button #trashAllButton');
   }
 
   get untrashDocumentsButton() {
@@ -49,6 +49,6 @@ export default class Selection extends BasePage {
 
   get deleteDocumentsButton() {
     // XXX: using a more specific selector here to ensure we can check for isExisting()
-    return this.el.element('nuxeo-delete-documents-button[hard] #deleteAllButton');
+    return this.el.element('nuxeo-delete-documents-button #deleteAllButton');
   }
 }

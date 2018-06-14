@@ -255,7 +255,7 @@ export default class Browser extends BasePage {
 
   get trashDocumentButton() {
     // XXX: using a more specific selector here to ensure we can check for isExisting()
-    return this.el.element('.document-actions nuxeo-delete-document-button #deleteButton');
+    return this.el.element('.document-actions nuxeo-trash-document-button #trashButton');
   }
 
   get untrashDocumentButton() {
@@ -265,7 +265,7 @@ export default class Browser extends BasePage {
 
   get deleteDocumentButton() {
     // XXX: using a more specific selector here to ensure we can check for isExisting()
-    return this.trashedInfobar.element('nuxeo-delete-document-button[hard] #deleteButton');
+    return this.trashedInfobar.element('nuxeo-delete-document-button #deleteButton');
   }
 
 }
