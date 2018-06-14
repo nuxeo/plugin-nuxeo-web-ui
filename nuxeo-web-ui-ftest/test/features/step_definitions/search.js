@@ -71,8 +71,8 @@ module.exports = function () {
     });
     return tasks.reduce((current, next) => current.then(next), Promise.resolve([]));
   });
-  this.When(/^I perform a (.+) search for (.+)$/, (searchType, searchTerm) => {
-    this.ui.searchForm.search(searchType, searchTerm);
+  this.When(/^I perform a (.+) search for (.+) on (.+)$/, (searchType, searchTerm, searchName) => {
+    this.ui.searchForm(searchName).search(searchType, searchTerm);
   });
   this.Then(/^I can see (\d+) search results$/, (numberOfResults) => {
     const displayMode = this.ui.results.displayMode;
