@@ -31,18 +31,18 @@ export default class Search extends Results {
     return driver.elementByTextContent('nuxeo-saved-search-actions paper-item', 'Share');
   }
 
-  getSavedSearch(searchName) {
+  getSavedSearch(savedSearchName) {
     driver.waitUntil(() => {
-      const els = driver.elements('nuxeo-search-form[name="defaultSearch"] #actionsDropdown paper-item').value;
+      const els = driver.elements(`${this._selector} #actionsDropdown paper-item`).value;
       return els.length > 1;
     });
     // XXX should be using driver.elementByTextContent but element returns empty text because the respective paper-item
     // is not interactable (nor visible)
-    const e = driver.execute((name) => {
-      const dropdown = document.querySelector(`* >>> nuxeo-search-form[name="defaultSearch"] >>> #actionsDropdown`);
-      return document.evaluate(`.//paper-item[text()="${name}"]`, dropdown, null, XPathResult.FIRST_ORDERED_NODE_TYPE,
+    const e = driver.execute((sn, sel) => {
+      const dropdown = document.querySelector(`* >>> ${sel} >>> #actionsDropdown`);
+      return document.evaluate(`.//paper-item[text()="${sn}"]`, dropdown, null, XPathResult.FIRST_ORDERED_NODE_TYPE,
           null).singleNodeValue;
-    }, searchName);
+    }, savedSearchName, this._selector);
     return e;
   }
 
