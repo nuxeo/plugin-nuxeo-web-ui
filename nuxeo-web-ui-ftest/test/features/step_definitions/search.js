@@ -147,4 +147,7 @@ module.exports = function () {
     this.ui.quickSearch.quickSearchResults.waitForVisible();
     this.ui.quickSearch.quickSearchResultsCount().toString().should.equal(numberOfResults);
   });
+  this.Then(/^I can see the (.+) search (.+) aggregation has (\d+) buckets$/, (searchName, aggName, bucketCount) => {
+    this.ui.searchForm(searchName).aggBucket(aggName).length.should.be.equal(parseInt(bucketCount));
+  });
 };

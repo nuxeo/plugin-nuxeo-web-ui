@@ -68,9 +68,12 @@ Feature: Search
     | managers   | 1               |
     | Test       | 5               |
 
-  Scenario: Default Search
+  Scenario: Test Search
     When I click the "test_search" button
-    And I perform a author search for Bob on test_search
+    Then I can see the test_search search creation aggregation has 0 buckets
+    When I perform a author search for Bob on test_search
     Then I can see 5 search results
+    And I can see the test_search search creation aggregation has 1 buckets
     When I clear the author search on test_search
     Then I can see more than 5 search results
+    And I can see the test_search search creation aggregation has 0 buckets

@@ -87,4 +87,15 @@ export default class Search extends Results {
     const rows = this.el.element('#results #selector').elements('//a');
     return rows.value.filter((result) => result.getAttribute('hidden') === null).length;
   }
+
+  aggBucket(aggName) {
+    const aggWidget = this.getField(aggName);
+    const aggWidgetTagName = aggWidget.getTagName().toLowerCase();
+    if (aggWidgetTagName === 'nuxeo-checkbox-aggregation') {
+      const buckets = aggWidget.elements('paper-checkbox').value;
+      return buckets;
+    } else {
+      throw Error(`Not supported aggregation widget type ${aggWidgetTagName}`);
+    }
+  }
 }
