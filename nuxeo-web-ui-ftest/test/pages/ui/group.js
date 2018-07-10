@@ -35,7 +35,7 @@ export default class Group extends BasePage {
   }
 
   get editGroupDialogButton() {
-    return this.el.element(`#editGroupDialog paper-button`);
+    return this.el.element(`#editGroupDialog paper-button.primary`);
   }
 
   get deleteGroupButton() {
