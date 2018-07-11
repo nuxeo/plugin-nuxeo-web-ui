@@ -1,3 +1,5 @@
+const path = require('path');
+
 'use strict';
 
 module.exports = function () {
@@ -24,6 +26,16 @@ module.exports = function () {
   });
 
   this.Then(/^I can see a ([-\w]+) previewer$/, (viewerType) => {
+    // For investigation purposes
+
+    const fileName = path.join(process.env.SCREENSHOTS_PATH,
+        `${viewerType}(INVESTIGATION).png`);
+
+    console.log('Path', fileName);
+
+    driver.saveScreenshot(fileName);
+    // End
+
     driver.waitForVisible(`#dialog ${viewerType}`);
   });
 };
