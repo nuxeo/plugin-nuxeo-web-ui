@@ -1,4 +1,6 @@
 const path = require('path');
+const mkdirp = require('mkdirp');
+const fs = require('fs');
 
 'use strict';
 
@@ -26,16 +28,28 @@ module.exports = function () {
   });
 
   this.Then(/^I can see a ([-\w]+) previewer$/, (viewerType) => {
-    // For investigation purposes
-
+    //  For investigation purposes
+    mkdirp.sync(process.env.SCREENSHOTS_PATH);
     const fileName = path.join(process.env.SCREENSHOTS_PATH,
         `${viewerType}(INVESTIGATION).png`);
+    const screenshot = driver.saveScreenshot();
+    fs.writeFileSync(fileName, screenshot);
+    //  End
 
-    console.log('Path', fileName);
+    const page = this.ui.browser.documentPage(this.doc.type);
+    page.view.waitForVisible(`#dialog ${viewerType}`);
+  });
 
-    driver.saveScreenshot(fileName);
-    // End
+  this.Then(/^I can see an attachment ([-\w]+) previewer$/, (viewerType) => {
+    //  For investigation purposes
+    mkdirp.sync(process.env.SCREENSHOTS_PATH);
+    const fileName = path.join(process.env.SCREENSHOTS_PATH,
+        `${viewerType}(INVESTIGATION).png`);
+    const screenshot = driver.saveScreenshot();
+    fs.writeFileSync(fileName, screenshot);
+    //  End
 
-    driver.waitForVisible(`#dialog ${viewerType}`);
+    const page = this.ui.browser.documentPage(this.doc.type);
+    page.metadata.attachments.waitForVisible(`#dialog ${viewerType}`);
   });
 };

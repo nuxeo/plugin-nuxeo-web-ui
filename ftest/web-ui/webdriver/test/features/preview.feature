@@ -44,7 +44,7 @@ Feature: Content Preview
     And this document has file "<file>" for attachment
     And I browse to the document
     And I click the preview button for the attachment
-    Then I can see a <viewer> previewer
+    Then I can see an attachment <viewer> previewer
 
     Examples:
       | file       | viewer             |
