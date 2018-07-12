@@ -45,7 +45,6 @@ exports.config = {
     // maxInstances: 1,
     //x
     maxInstances: 1,
-    autoWebview: true,
     browserName: 'chrome',
     javascriptEnabled : true,
     acceptSslCerts : true,

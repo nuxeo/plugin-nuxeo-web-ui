@@ -34,8 +34,10 @@ module.exports = function () {
     //  For investigation purposes
     driver.pause(3000);
     mkdirp.sync(process.env.SCREENSHOTS_PATH);
+    const date = new Date();
     const fileName = path.join(process.env.SCREENSHOTS_PATH,
-        `${viewerType}(INVESTIGATION).png`);
+        `${viewerType}__${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}_${date.getMilliseconds()}
+        (INVESTIGATION).png`);
     const screenshot = driver.saveScreenshot();
     fs.writeFileSync(fileName, screenshot);
     //  End
@@ -48,8 +50,10 @@ module.exports = function () {
     //  For investigation purposes
     driver.pause(3000);
     mkdirp.sync(process.env.SCREENSHOTS_PATH);
+    const date = new Date();
     const fileName = path.join(process.env.SCREENSHOTS_PATH,
-        `${viewerType}(INVESTIGATION).png`);
+        `${viewerType}__${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}_${date.getMilliseconds()}
+        (INVESTIGATION).png`);
     const screenshot = driver.saveScreenshot();
     fs.writeFileSync(fileName, screenshot);
     //  End

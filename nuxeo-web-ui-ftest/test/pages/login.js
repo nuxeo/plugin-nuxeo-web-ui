@@ -23,8 +23,10 @@ export default class Login {
     driver.url(baseUrl ? `${baseUrl}/logout` : 'logout');
     //  For investigation purposes
     mkdirp.sync(process.env.SCREENSHOTS_PATH);
+    const date = new Date();
     const fileName = path.join(process.env.SCREENSHOTS_PATH,
-        `loginScreen${new Date().getTime().toString()}(INVESTIGATION).png`);
+        `loginScreen_${date.getHours()}_${date.getMinutes()}_${date.getSeconds()}_${date.getMilliseconds()}
+        (INVESTIGATION).png`);
     const screenshot = driver.saveScreenshot();
     fs.writeFileSync(fileName, screenshot);
     //  End
