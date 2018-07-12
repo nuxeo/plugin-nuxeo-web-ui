@@ -28,28 +28,30 @@ module.exports = function () {
   });
 
   this.Then(/^I can see a ([-\w]+) previewer$/, (viewerType) => {
+    const page = this.ui.browser.documentPage(this.doc.type);
+    page.view.waitForVisible(`#dialog ${viewerType}`);
+
     //  For investigation purposes
+    driver.pause(3000);
     mkdirp.sync(process.env.SCREENSHOTS_PATH);
     const fileName = path.join(process.env.SCREENSHOTS_PATH,
         `${viewerType}(INVESTIGATION).png`);
     const screenshot = driver.saveScreenshot();
     fs.writeFileSync(fileName, screenshot);
     //  End
-
-    const page = this.ui.browser.documentPage(this.doc.type);
-    page.view.waitForVisible(`#dialog ${viewerType}`);
   });
 
   this.Then(/^I can see an attachment ([-\w]+) previewer$/, (viewerType) => {
+    const page = this.ui.browser.documentPage(this.doc.type);
+    page.metadata.attachments.waitForVisible(`#dialog ${viewerType}`);
+
     //  For investigation purposes
+    driver.pause(3000);
     mkdirp.sync(process.env.SCREENSHOTS_PATH);
     const fileName = path.join(process.env.SCREENSHOTS_PATH,
         `${viewerType}(INVESTIGATION).png`);
     const screenshot = driver.saveScreenshot();
     fs.writeFileSync(fileName, screenshot);
     //  End
-
-    const page = this.ui.browser.documentPage(this.doc.type);
-    page.metadata.attachments.waitForVisible(`#dialog ${viewerType}`);
   });
 };
