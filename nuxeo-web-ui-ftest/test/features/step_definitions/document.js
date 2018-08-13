@@ -11,31 +11,79 @@ module.exports = function () {
   });
 
   this.Given(/^I have a document imported from file "(.+)"$/, (mimeType) =>
-      fixtures.documents.import(this.doc, fixtures.blobs.mimeTypeBlobs[mimeType]).then((d) => { this.doc = d; }));
+    fixtures.documents.import(this.doc, fixtures.blobs.mimeTypeBlobs[mimeType]).then((d) => { this.doc = d; }));
 
   this.Given(/^I have permission (\w+) for this document$/, (permission) =>
-      fixtures.documents.setPermissions(this.doc, permission, this.username).then((d) => { this.doc = d; }));
+    fixtures.documents.setPermissions(this.doc, permission, this.username).then((d) => { this.doc = d; }));
+
+  this.Given(/^I have permission (\w+) for the document with path "(.+)"$/, (permission, path) =>
+    fixtures.documents.setPermissions(path, permission, this.username).then((d) => { this.doc = d; }));
+
+  this.Given(/^I have the following permissions to the documents$/, (table) => {
+    const promises = [];
+    table.rows().map((row) => {
+      promises.push(fixtures.documents.setPermissions(row[1], row[0], this.username));
+    });
+    return Promise.all(promises);
+  });
 
   this.Given(/^This document has a (major|minor) version$/, (versionType) =>
-      fixtures.documents.createVersion(this.doc, versionType).then((d) => { this.doc = d; }));
+    fixtures.documents.createVersion(this.doc, versionType).then((d) => { this.doc = d; }));
 
   this.Given(/^I have a document added to "([^"]*)" collection$/, (colName) => {
     const docFile = fixtures.documents.init('File');
     // create the document
     return fixtures.documents.create(this.doc.path, docFile)
-        .then((doc) => fixtures.collections.addToNewCollection(doc, colName)).then((d) => {
-          this.doc = d;
-        });
+      .then((doc) => fixtures.collections.addToNewCollection(doc, colName)).then((d) => {
+        this.doc = d;
+      });
   });
 
-  this.Given(/^This document has a workflow running$/, () =>
-      fixtures.workflows.start(this.doc, 'SerialDocumentReview', this.username));
+  this.Given(/^This document has a "([^"]*)" workflow running$/, (workflowName) =>
+    fixtures.workflows.start(this.doc, workflowName, this.username)
+        .then(workflowInstance => this.workflowInstance = workflowInstance)
+  );
+
+  this.Given(/^The workflow running for this document will proceed with "([^"]*)" action and the following variables:$/,
+    (action, table) => {
+      this.workflowInstance.should.not.be.undefined;
+      return this.workflowInstance.fetchTasks()
+          .then(tasks => {
+            tasks.entries.length.should.be.equal(1);
+            const task = tasks.entries[0];
+            table.rows().map((row) => {
+              row[2].should.to.be.oneOf(['list', 'text'], 'An unknown type was passed as argument');
+              let value;
+              switch (row[2]) {
+                case 'list':
+                  value = row[1].split(',');
+                  break;
+                case 'text':
+                  value = row[1];
+                  break;
+                default:
+                  // do nothing
+              }
+              task.variable(row[0], value);
+            });
+            return task.complete(action);
+          });
+    });
 
   this.Given(/^this document has file "(.+)" for content$/, (file) =>
-      fixtures.documents.attach(this.doc, fixtures.blobs.get(file)));
+    fixtures.documents.attach(this.doc, fixtures.blobs.get(file)));
 
   this.Given(/^this document has file "(.+)" for attachment/, (file) =>
-      fixtures.documents.attach(this.doc, fixtures.blobs.get(file), true));
+    fixtures.documents.attach(this.doc, fixtures.blobs.get(file), true));
+
+  this.Given(/^I have a (.+) Note$/, (format) => {
+    const doc = fixtures.documents.init('Note');
+    doc.properties['note:mime_type'] = fixtures.notes.formats[format].mimetype;
+    doc.properties['note:note'] = fixtures.notes.formats[format].content;
+    return fixtures.documents.create(this.doc.path, doc).then((result) => {
+      this.doc = result;
+    });
+  });
 
   this.When(/^I browse to the document$/, () => {
     driver.url(`#!/browse${this.doc.path}`);
@@ -47,6 +95,16 @@ module.exports = function () {
     driver.url(`#!/browse`.concat(path));
     this.ui.browser.waitForVisible();
     this.ui.browser.breadcrumb.waitForVisible();
+  });
+
+  this.When(/^I start a (.+)$/, (workflow) => {
+    this.ui.browser.startWorkflow(workflow);
+  });
+
+  this.When(/^I click the process button$/, () => {
+    const processWorkflowButton = this.ui.browser.documentPage().processWorkflowButton;
+    processWorkflowButton.waitForVisible();
+    processWorkflowButton.click();
   });
 
   this.Then(/^I can't view the document$/, () => {
@@ -94,15 +152,6 @@ module.exports = function () {
     browser.editDialog.saveButton.click();
   });
 
-  this.Given(/^I have a (.+) Note$/, (format) => {
-    const doc = fixtures.documents.init('Note');
-    doc.properties['note:mime_type'] = fixtures.notes.formats[format].mimetype;
-    doc.properties['note:note'] = fixtures.notes.formats[format].content;
-    return fixtures.documents.create(this.doc.path, doc).then((result) => {
-      this.doc = result;
-    });
-  });
-
   this.Then(/^I can edit the (.*) Note$/, (format) => {
     const page = this.ui.browser.documentPage(this.doc.type);
     page.view.waitForVisible();
@@ -148,14 +197,14 @@ module.exports = function () {
   });
 
   this.Then('I can see the document belongs to the "$name" collection', (name) =>
-      this.ui.browser.hasCollection(name).should.be.true);
+    this.ui.browser.hasCollection(name).should.be.true);
 
   this.Then('I can delete the document from the "$name" collection', (name) => {
     this.ui.browser.removeFromCollection(name);
   });
 
   this.Then('I can see the document does not belong to the "$name" collection', (name) =>
-      this.ui.browser.doesNotHaveCollection(name).should.be.true);
+    this.ui.browser.doesNotHaveCollection(name).should.be.true);
 
   this.Then('I add the document to the favorites', () => {
     this.ui.browser.addToFavorites();
@@ -164,10 +213,6 @@ module.exports = function () {
   this.Then('I can see the document has "$nb" children', (nb) =>
     this.ui.browser.waitForNbChildren(parseInt(nb))
   );
-
-  this.When(/^I start a (.+)$/, (workflow) => {
-    this.ui.browser.startWorkflow(workflow);
-  });
 
   this.Then(/^I can see a process is running in the document$/, () => {
     const documentPage = this.ui.browser.documentPage();
@@ -183,13 +228,7 @@ module.exports = function () {
   });
 
   this.Then(/^I cannot start a workflow$/, () => {
-    this.ui.browser.startWorkflowButton.isExisting().should.be.false;
-  });
-
-  this.When(/^I click the process button$/, () => {
-    const processWorkflowButton = this.ui.browser.documentPage().processWorkflowButton;
-    processWorkflowButton.waitForVisible();
-    processWorkflowButton.click();
+    this.ui.browser.startWorkflowButton.isVisible().should.be.false;
   });
 
   this.Then(/^I can abandon the workflow$/, () => {
@@ -198,11 +237,16 @@ module.exports = function () {
     abandonWorkflowButton.click();
     driver.alertAccept();
     const documentPage = this.ui.browser.documentPage();
+
     // check info bar in the document is not visible
-    documentPage.infoBar.isVisible().should.be.false;
+    documentPage.infoBar.waitForVisible(browser.options.waitforTimeout, true);
     // assert that info bar displays a task is running
-    documentPage.taskInfo.isVisible().should.be.false;
+    documentPage.taskInfo.waitForVisible(browser.options.waitforTimeout, true);
     // assert that document info says a process is running
-    documentPage.info.element('[name="process"]').isVisible().should.be.false;
+    documentPage.info.waitForVisible();
+    documentPage.info.waitForVisible('[name="process"]', browser.options.waitforTimeout, true);
+
+    // In order to avoid errors when performing the teardown
+    fixtures.workflows.removeInstance(this.workflowInstance.id);
   });
 };
