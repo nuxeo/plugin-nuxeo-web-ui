@@ -13,6 +13,13 @@ exports.capabilities = {
           version: '',
       }
   },
+  firefoxNightly: {
+    desiredCapabilities: {
+        browserName: 'firefox',
+        platform: 'Windows 10',
+        version: 'dev',
+    }
+  },
   safari: {
       desiredCapabilities: {
           browserName: 'safari',
