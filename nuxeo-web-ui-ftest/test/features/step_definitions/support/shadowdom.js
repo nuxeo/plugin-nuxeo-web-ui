@@ -57,7 +57,11 @@ class ShadowElement {
 function wrapShadow(element, isWebElement) {
   const el = isWebElement ? new ShadowElement(element) : element;
   el._element = el.element;
-  el.element = (...args) => wrapShadow(el._element.apply(el, formatParameters(args)), true);
+
+  el.elementOld = (...args) => wrapShadow(el._element.apply(el, formatParameters(args)), true);
+  //el.element = (...args) => wrapShadow(el._element.apply(el, formatParameters(args)), true);
+
+  el.element = (...args) => wrapShadow(axeSearch(el, args), true);
 
   el._elements = el.elements;
   el.elements = (...args) => wrapShadow(el._elements.apply(el, formatParameters(args)), true);
@@ -75,7 +79,7 @@ function wrapShadow(element, isWebElement) {
   el.waitForVisible = (...args) => el._waitForVisible.apply(el, formatParameters(args));
 
   el._click = el.click;
-  el.click = (...args) => el._click.apply(el, formatParameters(args));
+  el.click = (...args) => el._click.apply(el, args);
 
   el._waitForEnabled = el.waitForEnabled;
   el.waitForEnabled = (...args) => wrapShadow(el._waitForEnabled.apply(el, formatParameters(args)), true);
@@ -123,4 +127,32 @@ function wrapShadow(element, isWebElement) {
   return el;
 }
 
+function axeSearch(element, args){
+  let selector = customParse(args[0]); //may need parse-reformat
+
+  var r = browser.execute((selector, element) => {
+    var nodeList;
+    if (typeof axe !== 'undefined'){
+      const tree = axe.utils.getFlattenedTree(element || document);
+      nodeList = axe.utils.querySelectorAll(tree, selector);
+    }
+    else {
+      return document.querySelector(selector);
+    }
+
+    if(nodeList.length > 0){
+      return nodeList[0].actualNode;
+    }
+    return null;
+  }, selector, element.value);
+
+  return r;
+}
+
+function customParse(selector){
+  const regex = RegExp("#([\\w\\d_-]+)");
+  return selector.replace(regex,"[id='$1']")
+}
+
 wrapShadow(browser);
+browser.axeSearch = axeSearch;
