@@ -101,7 +101,7 @@ fixtures.documents = {
              })
     );
   },
-  addToLocalStorage: (document, username, storageName) => {
+  addToLocalStorage: (document, username, storageName) =>
     (typeof document === 'string' ? fixtures.documents.getDocument(document) : Promise.resolve(document))
           .then((docObject) => {
             if (docObject) {
@@ -125,8 +125,8 @@ fixtures.documents = {
                 localStorage.setItem(storageKey, JSON.stringify(store));
               }, storageDocument, key);
             }
-          });
-  },
+          }),
+
   clearLocalStorage: (username, storageName) => {
     const key = `${username}-${storageName}`;
     browser.execute((storageKey) => {

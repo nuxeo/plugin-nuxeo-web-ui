@@ -15,7 +15,7 @@ Feature: Recents
       | ReadWrite  | /default-domain/ws      |
       | ReadWrite  | /default-domain/ws/file |
 
-  Scenario: Document is added to Recently Viewed list when is viewed
+  Scenario: Document is added to Recently Viewed list when it's viewed
     Given I browse to the document with path "/default-domain/ws"
     And I browse to the document with path "/default-domain/ws/file"
     When I click the "recents" button
@@ -23,7 +23,7 @@ Feature: Recents
     And I can see the list of recently viewed documents has "ws" document
     And I can see the list of recently viewed documents has "file" document
 
-  Scenario: Document is removed from Recently Viewed list when is deleted
+  Scenario: Document is removed from Recently Viewed list when it's deleted
     Given I browse to the document with path "/default-domain/ws"
     And I browse to the document with path "/default-domain/ws/file"
     When I click the "recents" button

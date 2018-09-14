@@ -6,7 +6,8 @@ module.exports = function () {
   });
 
   this.Given(/^I have document with path "(.+)" on clipboard$/, (path) => {
-    fixtures.documents.addToLocalStorage(path, this.username, 'nuxeo-clipboard');
+    fixtures.documents.addToLocalStorage(path, this.username, 'nuxeo-clipboard')
+        .then(() => this.ui.drawer.clipboard.reload());
   });
 
   this.Given(/^I have the following documents on clipboard$/, (table) => {
@@ -14,7 +15,7 @@ module.exports = function () {
     table.rows().map((row) => {
       promises.push(fixtures.documents.addToLocalStorage(row[0], this.username, 'nuxeo-clipboard'));
     });
-    return Promise.all(promises);
+    return Promise.all(promises).then(() => this.ui.drawer.clipboard.reload());
   });
 
   this.When('I click remove button for "$title" document', (title) => {
