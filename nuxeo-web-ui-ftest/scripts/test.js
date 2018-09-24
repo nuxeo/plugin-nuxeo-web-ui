@@ -20,7 +20,8 @@
  *   --tags: only scenarios containing these tags will be ran
  *   --watch: watch for changes in tests and rerun them
  *   --wdioConfig: pass a custom wdio config file
- *   --debug: allow node instpector to be attached
+ *   --debug: allow node inspector to be attached
+ *   --browser: the browser to be used (defaults to chrome)
  */
 
 const fs = require('fs');
@@ -75,9 +76,11 @@ if (argv['debug']) {
   process.env.DEBUG = true;
 }
 
+process.env.BROWSER = argv['browser'] || 'chrome';
+
 process.env.FORCE_COLOR = true;
 
-const wdio = spawn(wdioBin, args, { env: process.env });
+const wdio = spawn(wdioBin, args, { env: process.env, stdio: ['inherit', 'pipe', 'pipe'] });
 
 wdio.stdout.pipe(process.stdout);
 wdio.stderr.pipe(process.stderr);
