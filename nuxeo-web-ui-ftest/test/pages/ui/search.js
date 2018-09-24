@@ -10,7 +10,7 @@ export default class Search extends Results {
 
   get saveSearchAsButton() {
     driver.waitForVisible('#actions paper-button');
-    return driver.elementByTextContent('#actions paper-button', 'SAVE AS');
+    return driver.elementByTextContent('#actions paper-button', 'Save As');
   }
 
   get confirmSaveSearchButton() {
@@ -38,11 +38,7 @@ export default class Search extends Results {
     });
     // XXX should be using driver.elementByTextContent but element returns empty text because the respective paper-item
     // is not interactable (nor visible)
-    const e = driver.execute((sn, sel) => {
-      const dropdown = document.querySelector(`* >>> ${sel} >>> #actionsDropdown`);
-      return document.evaluate(`.//paper-item[text()="${sn}"]`, dropdown, null, XPathResult.FIRST_ORDERED_NODE_TYPE,
-          null).singleNodeValue;
-    }, savedSearchName, this._selector);
+    const e = this.el.elementByTextContent('#actionsDropdown paper-item', savedSearchName);
     return e;
   }
 
@@ -78,7 +74,7 @@ export default class Search extends Results {
   }
 
   quickSearchResultsCount() {
-    const rows = this.el.element('#results #selector').elements('//a');
+    const rows = this.el.element('#results #selector').elements('a.item');
     return rows.value.filter((result) => result.getAttribute('hidden') === null).length;
   }
 }

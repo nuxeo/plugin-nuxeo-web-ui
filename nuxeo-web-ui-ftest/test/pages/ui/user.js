@@ -81,6 +81,7 @@ export default class User extends BasePage {
   }
 
   searchResult(searchTerm) {
-    return this.el.elementByTextContent('paper-card[name="users"] .table [name="id"]', searchTerm);
+    this.el.waitForExist('nuxeo-card[name="users"] .table [name="id"]');
+    return this.el.elementByTextContent('nuxeo-card[name="users"] .table [name="id"]', searchTerm);
   }
 }
