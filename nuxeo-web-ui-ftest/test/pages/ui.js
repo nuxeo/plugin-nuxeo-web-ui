@@ -55,7 +55,7 @@ export default class UI extends BasePage {
   }
 
   get results() {
-    return new Search('#results');
+    return new Search('nuxeo-search-results-layout[id="results"]');
   }
 
   get searchResults() {
