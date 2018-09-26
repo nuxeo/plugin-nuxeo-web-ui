@@ -1,3 +1,4 @@
+@cleanupLocalStorage
 Feature: Clipboard
 
   I can move and copy from clipboard
