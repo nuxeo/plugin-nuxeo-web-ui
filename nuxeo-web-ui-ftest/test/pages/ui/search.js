@@ -1,6 +1,7 @@
 'use strict';
 
 import Results from './results';
+import DocumentPermissions from './browser/document_permissions';
 
 export default class Search extends Results {
 
@@ -30,6 +31,10 @@ export default class Search extends Results {
   get shareAction() {
     driver.waitForVisible('nuxeo-saved-search-actions paper-item');
     return driver.elementByTextContent('nuxeo-saved-search-actions paper-item', 'Share');
+  }
+
+  get permissionsView() {
+    return new DocumentPermissions(`#shareDialog nuxeo-document-permissions`);
   }
 
   getSavedSearch(savedSearchName) {
