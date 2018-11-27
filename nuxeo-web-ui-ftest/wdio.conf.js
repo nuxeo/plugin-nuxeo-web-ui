@@ -201,7 +201,11 @@ exports.config = {
     /*
      * Increase window size to avoid hidden buttons
      */
-    browser.windowHandleMaximize();
+    try {
+      browser.windowHandleMaximize();
+    } catch (e) {
+      console.error('Failed to maximize.');
+    }
 
     require('babel-core/register')({
       ignore: /node_modules\/(?!@nuxeo\/nuxeo-web-ui-ftest)/

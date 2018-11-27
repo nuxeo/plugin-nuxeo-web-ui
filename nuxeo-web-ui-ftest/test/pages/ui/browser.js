@@ -268,7 +268,7 @@ export default class Browser extends BasePage {
 
   get startWorkflowButton() {
     // XXX: using a more specific selector here to ensure we can check for isExisting()
-    return this.el.element('.document-actions nuxeo-workflow-button #startButton');
+    return this.el.element('.document-actions nuxeo-workflow-button paper-icon-button');
   }
 
   startWorkflow(workflow) {
