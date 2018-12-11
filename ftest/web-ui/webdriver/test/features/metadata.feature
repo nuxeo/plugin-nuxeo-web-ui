@@ -17,7 +17,7 @@ Feature: Edit metadata
       | nature       | Internship report    |
       | subjects     | Medicine,Video games |
       | coverage     | Canada               |
-      #| expired      | 04-12-2082           |
+      | expired      | April 12, 2082       |
 
     Then I see the <doctype> page
     And I can see <doctype> metadata with the following properties:
@@ -27,7 +27,7 @@ Feature: Edit metadata
       | nature       | Internship report                       |
       | subjects     | Science/Medicine,Daily life/Video games |
       | coverage     | North-america/Canada                    |
-      #| expired      | April 12, 2082                          |
+      | expired      | April 12, 2082                          |
 
   Examples:
     | doctype  |
