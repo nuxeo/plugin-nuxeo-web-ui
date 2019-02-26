@@ -9,7 +9,6 @@ properties([
             booleanParam(name: 'CREATE_PR', defaultValue: true, description: 'Should PRs be created if build is successful?'),
             booleanParam(name: 'SKIP_IT_TESTS', defaultValue: false, description: 'Should the functional tests be skipped?'),
             booleanParam(name: 'SKIP_UNIT_TESTS', defaultValue: false, description: 'Should the element\'s tests be skipped?'),
-            booleanParam(name: 'GENERATE_METRICS', defaultValue: false, description: 'Should the metrics report be generated?'),
             string(name: 'BROWSER', defaultValue: 'chrome', description: 'The browser to use for functional tests.', trim: false),
             string(name: 'BROWSER_BINARY', defaultValue: '', description: 'The path to the browser binary.', trim: false),
     ]),
@@ -169,7 +168,6 @@ timestamps {
                             dir('plugin-nuxeo-web-ui') {
                                 def profiles = []
                                 if (!params.SKIP_IT_TESTS) profiles.add('ftest')
-                                if (params.GENERATE_METRICS) profiles.add('metrics')
                                 withCredentials([usernamePassword(credentialsId: 'SAUCE_WEB_UI_ACCESS_KEY', passwordVariable: 'SAUCE_ACCESS_KEY', usernameVariable: 'SAUCE_USERNAME')]) {
                                     sh "mvn clean install ${profiles.isEmpty() ? "" : "-P" + profiles.join(",")}"
                                 }
