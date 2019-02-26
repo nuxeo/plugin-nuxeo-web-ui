@@ -2,7 +2,7 @@ properties([
     [$class: 'RebuildSettings', autoRebuild: false, rebuildDisabled: false],
     parameters([
             string(name: 'BRANCH', defaultValue: '', description: 'Branch to test, fall-backs on $BASE_BRANCH if not found.', trim: false),
-            choice(name: 'BASE_BRANCH', choices: ['master', '10.10', '9.10'], description: 'The branch to fallback on when $BRANCH is not found.'),
+            choice(name: 'BASE_BRANCH', choices: ['10.10'], description: 'The branch to fallback on when $BRANCH is not found.'),
             string(name: 'SLAVE', defaultValue: 'SLAVE', description: 'Slave label to be used.', trim: false),
             booleanParam(name: 'CLEAN', defaultValue: false, description: 'Run npm and bower cache clean?'),
             booleanParam(name: 'SAUCE_LAB', defaultValue: true, description: 'Should unit tests be run on Sauce Lab (or just Chrome on the slave)?'),
@@ -82,7 +82,7 @@ timestamps {
     node(SLAVE) {
         try {
             deleteDir()
-            def VERSIONS_MAPPING = ['10.10': '2.4', '9.10': '2.2']
+            def VERSIONS_MAPPING = ['10.10': '2.4']
             def ELEMENTS_BASE_BRANCH = VERSIONS_MAPPING.containsKey(BASE_BRANCH) ? "maintenance-${VERSIONS_MAPPING.get(BASE_BRANCH)}.x" : BASE_BRANCH
             def MP_BASE_BRANCH = VERSIONS_MAPPING.containsKey(BASE_BRANCH) ? "${VERSIONS_MAPPING.get(BASE_BRANCH)}_${BASE_BRANCH}" : BASE_BRANCH
             def el, uiel, webui, webuiitests, plugin
