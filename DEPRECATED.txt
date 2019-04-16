@@ -1,0 +1,1 @@
+This package has been deprecated and has been merged into https://github.com/nuxeo/nuxeo-web-ui.
