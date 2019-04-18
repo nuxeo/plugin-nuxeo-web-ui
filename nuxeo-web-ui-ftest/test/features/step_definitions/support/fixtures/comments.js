@@ -1,7 +1,7 @@
 import {
   After,
 } from 'cucumber';
-import nuxeo from '../services/client';
+import Nuxeo from 'nuxeo';
 
 global.addedComments = [];
 
@@ -15,6 +15,7 @@ fixtures.comments = {
         text,
       },
     };
+    const nuxeo = new Nuxeo({ auth: { method: 'basic', username: author, password: users[author] } });
     return nuxeo.request(`/id/${parentId}/@comment`).post(params)
       .then((response) => {
         if (response.ancestorIds.length === 1) {
