@@ -3,7 +3,7 @@ properties([
     parameters([
             string(name: 'BRANCH', defaultValue: '', description: 'Branch to test, fall-backs on $BASE_BRANCH if not found.', trim: false),
             choice(name: 'BASE_BRANCH', choices: ['10.10'], description: 'The branch to fallback on when $BRANCH is not found.'),
-            string(name: 'SLAVE', defaultValue: 'SLAVE1010&&!STATIC', description: 'Slave label to be used.', trim: false),
+            string(name: 'SLAVE', defaultValue: 'SLAVE1010', description: 'Slave label to be used.', trim: false),
             booleanParam(name: 'CLEAN', defaultValue: false, description: 'Run npm and bower cache clean?'),
             booleanParam(name: 'SAUCE_LAB', defaultValue: true, description: 'Should unit tests be run on Sauce Lab (or just Chrome on the slave)?'),
             booleanParam(name: 'CREATE_PR', defaultValue: true, description: 'Should PRs be created if build is successful?'),
