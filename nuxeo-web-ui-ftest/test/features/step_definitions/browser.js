@@ -49,6 +49,11 @@ module.exports = function () {
     this.ui.browser.selectionToolbar.waitForVisible();
   });
 
+  this.Then('I can add selection to the "$collectionName" collection', (collectionName) => {
+    this.ui.browser.waitForVisible();
+    this.ui.browser.selectionToolbar.addToCollectionDialog.addToCollection(collectionName);
+  });
+
   this.Then('I can add selection to clipboard', () => {
     this.ui.browser.waitForVisible();
     this.ui.browser.selectionToolbar.addToClipboard();
