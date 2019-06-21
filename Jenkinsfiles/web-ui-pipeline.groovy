@@ -175,7 +175,7 @@ timestamps {
                                         sh "mvn clean install ${profiles.isEmpty() ? "" : "-P" + profiles.join(",")}"
                                     }
                                 } finally {
-                                    archive '**/reports/*,**/log/*.log, **/target/cucumber-reports/*.json, **/nxserver/config/distribution.properties, **/failsafe-reports/*, **/target/results/*.html, **/target/screenshots/*.png, marketplace/target/nuxeo-web-ui-marketplace-*-SNAPSHOT.zip, metrics/target/report/*'
+                                    archiveArtifacts '**/reports/*,**/log/*.log, **/target/cucumber-reports/*.json, **/nxserver/config/distribution.properties, **/failsafe-reports/*, **/target/results/*.html, **/target/screenshots/*.png, marketplace/target/nuxeo-web-ui-marketplace-*-SNAPSHOT.zip, metrics/target/report/*'
                                 }
                             }
                         } else {
