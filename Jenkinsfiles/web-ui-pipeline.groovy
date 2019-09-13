@@ -7,6 +7,7 @@ properties([
             booleanParam(name: 'CLEAN', defaultValue: false, description: 'Run npm and bower cache clean?'),
             booleanParam(name: 'SAUCE_LAB', defaultValue: true, description: 'Should unit tests be run on Sauce Lab (or just Chrome on the slave)?'),
             booleanParam(name: 'CREATE_PR', defaultValue: true, description: 'Should PRs be created if build is successful?'),
+            booleanParam(name: 'SKIP_PLATFORM_TESTS', defaultValue: false, description: 'Should the platform unit tests be skipped?'),
             booleanParam(name: 'SKIP_IT_TESTS', defaultValue: false, description: 'Should the functional tests be skipped?'),
             booleanParam(name: 'SKIP_UNIT_TESTS', defaultValue: false, description: 'Should the element\'s tests be skipped?'),
             booleanParam(name: 'GENERATE_METRICS', defaultValue: false, description: 'Should the metrics report be generated?'),
@@ -85,9 +86,32 @@ timestamps {
             def VERSIONS_MAPPING = ['10.10': '2.4']
             def ELEMENTS_BASE_BRANCH = VERSIONS_MAPPING.containsKey(BASE_BRANCH) ? "maintenance-${VERSIONS_MAPPING.get(BASE_BRANCH)}.x" : BASE_BRANCH
             def MP_BASE_BRANCH = VERSIONS_MAPPING.containsKey(BASE_BRANCH) ? "${VERSIONS_MAPPING.get(BASE_BRANCH)}_${BASE_BRANCH}" : BASE_BRANCH
-            def el, uiel, webui, webuiitests, plugin
+            def platform, el, uiel, webui, webuiitests, plugin
             if (params.CLEAN) {
                 sh 'npm cache clean --force && bower cache clean'
+            }
+            def mvnHome = tool 'maven-3.3'
+            def javaHome = tool 'java-8-oracle'
+            withEnv(["JAVA_HOME=${javaHome}", "MAVEN_OPTS=-Xmx2048M -Xss128M -XX:MaxPermSize=2048M -XX:+CMSClassUnloadingEnabled -XX:+UseConcMarkSweepGC", "MAVEN=${mvnHome}/bin", "PATH=${env.JAVA_HOME}/bin:${env.MAVEN}:${env.PATH}"]) {
+              stage('nuxeo-server-tomcat') {
+                timeout(120) {
+                    platform = cloneRebaseAndDir('nuxeo')
+                    if (platform) {
+                        echo 'Need to build nuxeo platform'
+                        dir('nuxeo') {
+                          sh './clone.py'
+                          if (params.SKIP_PLATFORM_TESTS) {
+                            sh 'mvn install -Paddons,distrib -DskipTests'
+                          } else {
+                            sh 'mvn install -Paddons,distrib'
+                          }
+                          archive 'nuxeo-distribution/nuxeo-server-tomcat/target/*.zip'
+                        }
+                    } else {
+                        echo 'No need to build nuxeo platform'
+                    }
+                }
+              }
             }
             stage('nuxeo-elements') {
                 timeout(30) {
@@ -122,8 +146,6 @@ timestamps {
                     }
                 }
             }
-            def mvnHome = tool 'maven-3.3'
-            def javaHome = tool 'java-8-oracle'
             withEnv(["JAVA_HOME=${javaHome}", "MAVEN=${mvnHome}/bin", "PATH=${env.JAVA_HOME}/bin:${env.MAVEN}:${env.PATH}"]) {
                 stage('nuxeo-web-ui') {
                     timeout(60) {
@@ -164,7 +186,7 @@ timestamps {
                 stage('plugin-nuxeo-web-ui') {
                     timeout(60) {
                         plugin = cloneRebaseAndDir('plugin-nuxeo-web-ui', BRANCH, MP_BASE_BRANCH)
-                        if (plugin || el || uiel || webuiitests || webui) {
+                        if (platform || plugin || el || uiel || webuiitests || webui) {
                             echo 'Need to plugin-nuxeo-web-ui'
                             dir('plugin-nuxeo-web-ui') {
                                 def profiles = []
@@ -185,6 +207,9 @@ timestamps {
                 }
                 stage('post-build') {
                     if (params.CREATE_PR) {
+                        if (platform) {
+                            createPullRequest('nuxeo')
+                        }
                         if (el) {
                             createPullRequest('nuxeo-elements', BRANCH, ELEMENTS_BASE_BRANCH)
                         }
