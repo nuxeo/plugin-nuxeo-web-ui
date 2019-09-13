@@ -205,6 +205,19 @@ timestamps {
                         }
                     }
                 }
+                stage('marketplace retention') {
+                    timeout(30) {
+                        cloneRebaseAndDir('marketplace-retention', '1.0_10.10', null)
+                        echo 'Building marketplace retention'
+                        dir('marketplace-retention') {
+                            try {
+                                sh 'mvn clean install -Pftest -nsu'
+                            } finally {
+                                archive 'marketplace/target/*.zip'
+                            }
+                        }
+                    }
+                }
                 stage('post-build') {
                     if (params.CREATE_PR) {
                         if (platform) {
