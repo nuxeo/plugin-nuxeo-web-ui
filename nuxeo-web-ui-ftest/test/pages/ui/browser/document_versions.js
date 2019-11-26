@@ -68,11 +68,12 @@ export default class DocumentVersions extends BasePage {
   }
 
   selectVersion(label) {
+    this.list.waitForVisible('div[name="version-item"] .title');
     const items = this.list.elements('div[name="version-item"]').value;
     const itemClicked = items.some((item) => {
       const foundLabel = item.getText('.title').trim();
       if (foundLabel === label) {
-        item.click();
+        item.elements('.title').click();
         return true;
       }
       return false;
