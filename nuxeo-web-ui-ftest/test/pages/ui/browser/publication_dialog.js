@@ -23,6 +23,7 @@ export default class PublicationDialog extends BasePage {
       const overrideCheckbox = this.el.element('#override');
       fixtures.layouts.setValue(overrideCheckbox, true);
     }
+    this.el.waitForVisible('#publish');
     this.el.waitForEnabled('#publish');
     this.el.click('#publish');
   }
