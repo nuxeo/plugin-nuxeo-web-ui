@@ -18,7 +18,7 @@ const suggestionSet = (element, value) => {
     for (let i = 0; i < values.length; i++) {
       element.waitForVisible(isMulti ? 'input' : '#input');
       element.element(isMulti ? 'input' : '.selectivity-caret').click();
-      const dropdown = element.element('.selectivity-dropdown:last-child');
+      let dropdown = element.element('.selectivity-dropdown:last-child');
       if (isMulti) {
         element.waitForVisible('.selectivity-multiple-input');
         element.element('.selectivity-multiple-input').setValue(values[i]);
@@ -37,6 +37,8 @@ const suggestionSet = (element, value) => {
         }
         return false;
       });
+      element.waitForVisible('.selectivity-dropdown:last-child');
+      dropdown = element.element('.selectivity-dropdown:last-child');
       dropdown.click('.selectivity-result-item.highlight');
     }
   // it's a reset
