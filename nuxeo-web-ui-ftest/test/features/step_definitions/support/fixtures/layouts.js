@@ -18,26 +18,26 @@ const suggestionSet = (element, value) => {
     for (let i = 0; i < values.length; i++) {
       element.waitForVisible(isMulti ? 'input' : '#input');
       element.element(isMulti ? 'input' : '.selectivity-caret').click();
-      const dropdown = element.element('.selectivity-dropdown:last-child');
+      element.waitForVisible('.selectivity-dropdown:last-child');
       if (isMulti) {
         element.waitForVisible('.selectivity-multiple-input');
         element.element('.selectivity-multiple-input').setValue(values[i]);
       } else {
-        dropdown.waitForVisible('.selectivity-search-input');
-        dropdown.element('.selectivity-search-input').setValue(values[i]);
+        element.waitForVisible('.selectivity-search-input');
+        element.element('.selectivity-search-input').setValue(values[i]);
       }
       driver.waitUntil(() => {
-        if (dropdown.isVisible('.selectivity-result-item.highlight')) {
-          try {
-            const highlight = dropdown.element('.selectivity-result-item.highlight');
+        try {
+          if (element.isVisible('.selectivity-result-item.highlight')) {
+            const highlight = element.element('.selectivity-result-item.highlight');
             return highlight.getText().trim().includes(values[i]);
-          } catch (e) {
-            return false;
           }
+          return false;
+        } catch (e) {
+          return false;
         }
-        return false;
       });
-      dropdown.click('.selectivity-result-item.highlight');
+      element.click('.selectivity-result-item.highlight');
     }
   // it's a reset
   } else if (element.getAttribute('multiple')) {
