@@ -12,12 +12,12 @@ const suggestionGet = (element) => {
 };
 const suggestionSet = (element, value) => {
   const isMulti = element.getAttribute('multiple');
+  element.waitForVisible(isMulti ? 'input' : '#input');
   if (value) {
     const values = isMulti ? value.split(',') : [value];
     element.scrollIntoView('#input');
     for (let i = 0; i < values.length; i++) {
-      element.waitForVisible(isMulti ? 'input' : '#input');
-      element.element(isMulti ? 'input' : '.selectivity-caret').click();
+      element.element(isMulti ? 'input' : '#input').click();
       let dropdown = element.element('.selectivity-dropdown:last-child');
       if (isMulti) {
         element.waitForVisible('.selectivity-multiple-input');
