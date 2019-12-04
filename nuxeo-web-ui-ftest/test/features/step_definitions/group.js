@@ -24,13 +24,22 @@ module.exports = function () {
 
   this.Then(/^I can edit the following groups$/, (table) => {
     table.rows().forEach((row) => {
-      this.ui.group.searchFor(row[0]);
-      this.ui.group.searchResult(row[0]).waitForVisible();
-      this.ui.group.searchResult(row[0]).click();
-      this.ui.group.editGroupButton.waitForVisible();
-      this.ui.group.editGroupButton.click();
-      fixtures.layouts.setValue(this.ui.group.editGroupLabel, row[1]);
-      this.ui.group.editGroupDialogButton.click();
+      driver.waitUntil(() => {
+        try {
+          this.ui.group.searchFor(row[0]);
+          this.ui.group.searchResult(row[0]).waitForVisible();
+          this.ui.group.searchResult(row[0]).click();
+          this.ui.group.editGroupButton.waitForVisible();
+          this.ui.group.editGroupButton.click();
+          fixtures.layouts.setValue(this.ui.group.editGroupLabel, row[1]);
+          this.ui.group.editGroupDialogButton.click();
+          return true;
+        } catch (e) {
+          console.error('Error while editing group');
+          console.error(e);
+          return false;
+        }
+      });
       browser.back();
     });
   });
