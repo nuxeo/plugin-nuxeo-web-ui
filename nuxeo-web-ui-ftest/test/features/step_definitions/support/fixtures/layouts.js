@@ -37,8 +37,8 @@ const suggestionSet = (element, value) => {
         }
         return false;
       });
-      element.waitForVisible('.selectivity-dropdown:last-child');
-      dropdown = element.element('.selectivity-dropdown:last-child');
+      element.waitForVisible('.selectivity-results-container');
+      dropdown = element.element('.selectivity-results-container');
       dropdown.click('.selectivity-result-item.highlight');
     }
   // it's a reset
