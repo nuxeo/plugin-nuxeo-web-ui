@@ -30,6 +30,7 @@ Feature: Search
       | File       | Nuxeo_File       | invoice | art/culture             | europe/France        | BJones  | /default-domain/My_Workspace    | Test_Collection  | urgent | sample.mp4 |
     And I login as "Administrator"
 
+  @watch
   Scenario Outline: Default Search
     When I click the "defaultSearch" button
     And I perform a <searchType> search for <searchTerm> on defaultSearch
