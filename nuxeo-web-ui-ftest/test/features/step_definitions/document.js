@@ -143,6 +143,7 @@ Then(/^I can edit the (.*) metadata$/, function (docType) {
   form.waitForVisible();
   form.title = docType;
   form.save();
+  driver.waitForExist('iron-overlay-backdrop', driver.options.waitForTimeout, true);
 });
 
 Then(/^I can edit the following properties in the (.+) metadata:$/, function (docType, table) {
@@ -154,6 +155,7 @@ Then(/^I can edit the following properties in the (.+) metadata:$/, function (do
   form.layout.waitForVisible();
   form.layout.fillMultipleValues(table);
   form.save();
+  driver.waitForExist('iron-overlay-backdrop', driver.options.waitForTimeout, true);
 });
 
 Then(/^I can edit the (.*) Note$/, function (format) {

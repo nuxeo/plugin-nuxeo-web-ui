@@ -26,6 +26,8 @@ export default class PublicationDialog extends BasePage {
     this.el.waitForVisible('#publish');
     this.el.waitForEnabled('#publish');
     this.el.click('#publish');
+    // wait for iron-overlay-backdrop to not be visible
+    driver.waitForVisible('iron-overlay-backdrop', driver.options.waitForTimeout, true);
   }
 
   waitForVisible() {
