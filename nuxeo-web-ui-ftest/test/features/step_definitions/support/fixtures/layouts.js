@@ -48,12 +48,13 @@ global.fieldRegistry.register('nuxeo-input',
                               (element, value) => { element.element('#nativeInput').setValue(value); });
 global.fieldRegistry.register('nuxeo-select',
                               (element) => {
-                                element.element('#input').getValue();
+                                element.element('iron-input input').getValue();
                               },
                               (element, value) => {
-                                element.element('#input').click();
+                                element.element('iron-input input').click();
+                                element.waitForExist('paper-item');
                                 const item = element.elementByTextContent('paper-item', value);
-                                item.waitForVisible();
+                                item.waitForExist();
                                 item.click();
                               });
 global.fieldRegistry.register('nuxeo-date',
