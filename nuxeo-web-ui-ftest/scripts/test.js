@@ -68,6 +68,10 @@ if (argv['watch']) {
   args.push('--watch');
 }
 
+if (argv['headless']) {
+  process.env.HEADLESS = true;
+}
+
 if (argv['tags']) {
   args.push(`--cucumberOpts.tags=${argv['tags']}`);
 }

@@ -3,7 +3,7 @@
   "version": "1.0.0",
   "scripts": {
     "lint": "eslint test",
-    "test": "nuxeo-web-ui-ftest --report --screenshots",
+    "test": "nuxeo-web-ui-ftest --report --screenshots --headless",
     "pretest": "npm run lint",
     "test:dev": "nuxeo-web-ui-ftest --nuxeoUrl=http://localhost:8080/nuxeo",
     "pretest:dev": "npm run lint",
