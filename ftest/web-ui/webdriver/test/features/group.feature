@@ -5,7 +5,7 @@ Feature: Group
   Background:
     Given I have the following groups
       | name           | label    |
-      | managers       | Managers |
+      | mana?gers       | Managers |
       | managers/webui |          |
     Given I login as "Administrator"
     And I click the "administration" button
@@ -25,15 +25,15 @@ Feature: Group
   Scenario: Search Groups
     Then I can search for the following groups
       | name      | label    |
-      | managers  | Managers |
+      | mana?gers  | Managers |
 
   Scenario: Edit Groups
     Then I can edit the following groups
       | name           | newLabel                  |
-      | managers       | Managers Group            |
+      | mana?gers       | Managers Group            |
       | managers/webui | Managers Group for web ui |
 
   Scenario: Delete Groups
     Then I can delete the following groups
       | name      | label    |
-      | managers  | Managers |
+      | mana?gers  | Managers |
