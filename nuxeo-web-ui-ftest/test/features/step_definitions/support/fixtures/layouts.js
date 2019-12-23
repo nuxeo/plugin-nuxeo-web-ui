@@ -18,13 +18,18 @@ const suggestionSet = (element, value) => {
     for (let i = 0; i < values.length; i++) {
       element.waitForVisible(isMulti ? 'input' : '#input');
       element.element(isMulti ? 'input' : '.selectivity-caret').click();
-      element.waitForVisible('.selectivity-dropdown:last-child');
+      const dropdown = element.element('.selectivity-dropdown:last-child');
       if (isMulti) {
         element.waitForVisible('.selectivity-multiple-input');
         element.element('.selectivity-multiple-input').setValue(values[i]);
       } else {
-        element.waitForVisible('.selectivity-search-input');
-        element.element('.selectivity-search-input').setValue(values[i]);
+        const hasSelectedValue = element.element('.selectivity-single-selected-item').isExisting();
+        dropdown.waitForVisible('.selectivity-search-input');
+        dropdown.element('.selectivity-search-input').setValue(values[i]);
+        if (hasSelectedValue) {
+          dropdown.element('.selectivity-result-item').waitForVisible();
+          driver.keys('Down arrow');
+        }
       }
       driver.waitUntil(() => {
         try {
