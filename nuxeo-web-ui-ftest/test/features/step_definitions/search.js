@@ -108,6 +108,8 @@ module.exports = function () {
       this.ui.results.noResults.waitForVisible().should.be.true;
     } else {
       this.ui.results.getResults(displayMode).waitForVisible();
+      driver.waitUntil(() => this.ui.results.resultsCount(displayMode).toString() === numberOfResults,
+        `Expecting to get ${numberOfResults} results but found ${this.ui.results.resultsCount(displayMode)}`);
       this.ui.results.resultsCount(displayMode).toString().should.equal(numberOfResults);
     }
   });
