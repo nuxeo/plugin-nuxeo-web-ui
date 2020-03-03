@@ -71,6 +71,31 @@ module.exports = function () {
     });
     return tasks.reduce((current, next) => current.then(next), Promise.resolve([]));
   });
+  this.Given(/^I have a saved search named "(.+)", for the "(.+)" page provider, with the following parameters$/,
+    (searchName, pageProvider, table) => {
+      const hashes = table.rows().map(([key, value]) => ({ key, value: JSON.parse(value) }));
+      // could be replaced with Object.fromEntries(...), which is only support from nodejs 12.x on
+      const params = hashes.reduce((obj, { key, value }) => {
+        obj[key] = value;
+        return obj;
+      }, {});
+      return fixtures.savedSearches.create(searchName, pageProvider, params).then((savedSearch) => {
+        this.savedSearch = savedSearch;
+      });
+    }
+  );
+
+  this.When('I browse to the saved search', () => {
+    driver.url(`#!/doc/${this.savedSearch.id}`);
+  });
+
+  this.Then(/^I can see that my saved search "(.+)" on "(.+)" is selected$/, (savedSearchName, searchName) => {
+    this.ui.searchForm(searchName).menuButton.waitForVisible();
+    const el = this.ui.searchForm(searchName).getSavedSearch(savedSearchName);
+    el.waitForExist().should.be.true;
+    el.getAttribute('class').should.equal('iron-selected');
+  });
+
   this.When(/^I clear the (.+) search on (.+)$/, (searchType, searchName) => {
     this.ui.searchForm(searchName).search(searchType);
   });
