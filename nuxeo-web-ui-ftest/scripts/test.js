@@ -35,10 +35,7 @@ const argv = require('minimist')(process.argv.slice(2));
 const defaultDef = './test/features/step_definitions';
 
 const args = [argv.wdioConfig ? argv.wdioConfig : path.join(__dirname, '../wdio.conf.js')];
-
-if (argv.features) {
-  args.push(`--specs=${argv.features}`);
-}
+args.push(`--specs=${argv.features || './test/features/*.feature'}`);
 
 if (argv.url) {
   process.env.NUXEO_WEB_UI_URL = argv.url;
