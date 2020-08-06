@@ -12,6 +12,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
-    "@nuxeo/nuxeo-web-ui-ftest": "file:../../../nuxeo-web-ui-ftest"
+    "@nuxeo/nuxeo-web-ui-ftest": "file:../../../nuxeo-web-ui-ftest",
+    "selenium-standalone": "6.17.0"
   }
 }
