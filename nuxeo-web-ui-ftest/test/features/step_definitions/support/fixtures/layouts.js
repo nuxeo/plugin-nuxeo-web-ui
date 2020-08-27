@@ -156,13 +156,14 @@ global.fieldRegistry.register('nuxeo-checkbox-aggregation',
     });
     el.click();
   });
-global.fieldRegistry.register('nuxeo-dropzone',
-  () => driver.element('nuxeo-dropzone input[id=\'input\']').getValue(),
+global.fieldRegistry.register(
+  'nuxeo-dropzone',
+  element => element.element("input[id='input']").getValue(),
   (element, value) => {
-    browser.waitForExist('nuxeo-dropzone input[id=\'input\']');
-    browser.chooseFile('nuxeo-dropzone input[id=\'input\']',
-      path.resolve(fixtures.blobs.get(value)));
-  });
+    element.waitForExist("input[id='input']");
+    element.chooseFile("input[id='input']", path.resolve(fixtures.blobs.get(value)));
+  }
+);
 global.fieldRegistry.register('nuxeo-data-table',
   (element) => {
     const result = [];
