@@ -58,6 +58,7 @@ exports.config = {
           args: [
             '--no-sandbox',
           ],
+          w3c: false,
         };
 
         if (process.env.HEADLESS) {
