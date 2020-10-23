@@ -66,6 +66,19 @@ Feature: Search
     When I click the "defaultSearch" button
     Then I can see that my saved search "Portugal" on "defaultSearch" is selected
 
+  Scenario: Create a new Search from another Saved Search
+    Given I have a saved search named "Portugal", for the "default_search" page provider, with the following parameters
+      | key             | value               |
+      | dc_coverage_agg | ["europe/Portugal"] |
+    And I have permission Read for this saved search
+    And I browse to the saved search
+    When I click the "defaultSearch" button
+    And I can see that my saved search "Portugal" on "defaultSearch" is selected
+    Then I perform a coverage search for Europe/France on defaultSearch
+    And I can see 12 search results
+    And I save my search as "PortugalFrance"
+    And I can see that my saved search "PortugalFrance" on "defaultSearch" is selected
+
   Scenario Outline: Quick Search
     When I click the QuickSearch button
     And I perform a QuickSearch for <searchTerm>
