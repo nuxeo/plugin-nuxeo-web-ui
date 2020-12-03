@@ -26,6 +26,7 @@
     "mkdirp": "^0.5.1",
     "moment": "^2.22.0",
     "nuxeo": "^3.6.0",
+    "selenium-standalone": "6.20.2",
     "wdio-cucumber-framework": "^0.3.1",
     "wdio-json-reporter": "^0.3.1",
     "wdio-junit-reporter": "^0.4.2",
