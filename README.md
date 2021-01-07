@@ -13,6 +13,8 @@ To run functional tests:
 
     mvn clean install -Pftest
 
+Note: This version of Nuxeo Web UI functional tests requires node version >=6.0.0.
+
 ## Deploying
 
 ### Nuxeo Package
