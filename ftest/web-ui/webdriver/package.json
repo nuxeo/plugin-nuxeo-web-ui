@@ -1,7 +1,11 @@
 {
   "name": "nuxeo-web-ui-webdriverio",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=6.0.0"
+  },
   "scripts": {
+    "postinstall": "check-engine || true",
     "lint": "eslint test",
     "test": "nuxeo-web-ui-ftest --report --screenshots --headless",
     "pretest": "npm run lint",
@@ -12,6 +16,7 @@
   },
   "license": "Apache-2.0",
   "dependencies": {
+    "check-engine": "1.8.1",
     "@nuxeo/nuxeo-web-ui-ftest": "file:../../../nuxeo-web-ui-ftest"
   }
 }
