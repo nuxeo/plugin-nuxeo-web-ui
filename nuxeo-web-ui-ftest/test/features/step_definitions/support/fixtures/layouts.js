@@ -3,7 +3,7 @@ import FieldRegistry from '../services/field_registry';
 
 global.fieldRegistry = new FieldRegistry();
 const suggestionGet = (element) => {
-  if (element.getAttribute('multiple')) {
+  if (element.getAttribute('multiple') !== null) {
     return element.elements('.selectivity-multiple-selected-item')
       .value.map(v => v.getText()).join(',');
   } else {
@@ -11,7 +11,7 @@ const suggestionGet = (element) => {
   }
 };
 const suggestionSet = (element, value) => {
-  const isMulti = element.getAttribute('multiple');
+  const isMulti = element.getAttribute('multiple') !== null;
   if (value) {
     const values = isMulti ? value.split(',') : [value];
     element.scrollIntoView('#input');
@@ -45,7 +45,7 @@ const suggestionSet = (element, value) => {
       element.click('.selectivity-result-item.highlight');
     }
   // it's a reset
-  } else if (element.getAttribute('multiple')) {
+  } else if (element.getAttribute('multiple') !== null) {
     element.elements('.selectivity-multiple-selected-item')
       .value.forEach(el => el.element('.selectivity-multiple-selected-item-remove').click());
   } else {
@@ -128,7 +128,7 @@ global.fieldRegistry.register('paper-input',
     element.element('.input-element input').setValue(value);
   });
 global.fieldRegistry.register('paper-radio-button',
-  element => element.element('#radioContainer').getAttribute('multiple'),
+  element => element.element('#radioContainer').getAttribute('multiple') !== null,
   (element, value) => {
     if (value) {
       element.element('#radioContainer').click();
@@ -138,15 +138,15 @@ global.fieldRegistry.register('paper-textarea',
   element => element.element('#textarea').getValue(),
   (element, value) => { element.element('#textarea').setValue(value); });
 global.fieldRegistry.register('paper-checkbox',
-  element => element.getAttribute('checked'),
+  element => element.getAttribute('checked') !== null,
   (element, value) => {
-    if ((value === false && element.getAttribute('checked') === 'true')
-      || (value === true && !element.getAttribute('checked'))) {
+    if ((value === false && element.getAttribute('checked') !== null)
+      || (value === true && element.getAttribute('checked') === null)) {
       element.click();
     }
   });
 global.fieldRegistry.register('nuxeo-checkbox-aggregation',
-  element => element.element('paper-checkbox').getAttribute('aria-checked'),
+  element => element.element('paper-checkbox').getAttribute('aria-checked') !== null,
   (element, value) => {
     element.waitForVisible('paper-checkbox');
     const els = element.elements('paper-checkbox').value;
