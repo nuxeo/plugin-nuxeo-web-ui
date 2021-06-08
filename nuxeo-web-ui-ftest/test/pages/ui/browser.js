@@ -217,8 +217,9 @@ export default class Browser extends BasePage {
   sortContent(field, order) {
     driver.waitUntil(() => {
       this.waitForChildren();
-      const columnIndex = this.currentPage.elements('nuxeo-data-table nuxeo-data-table-column')
-        .value.map(col => col.getAttribute('sortBy'))
+      const columnIndex = this.currentPage
+        .shadowExecute('nuxeo-data-table',
+          table => Array.from(table.querySelectorAll('nuxeo-data-table-column')).map(c => c.sortBy)).value
         .findIndex(colSortByField => colSortByField && colSortByField.toLowerCase() === field.toLowerCase());
       if (columnIndex === -1) {
         throw new Error('Field not found');
@@ -313,7 +314,7 @@ export default class Browser extends BasePage {
     }
     const action = menu.element(selector);
     action.waitForExist();
-    if (action.getAttribute('show-label') != null) {
+    if (action.getAttribute('show-label') !== null) {
       // if the element is inside the dropdown, we need to expand it
       menu.click('#dropdownButton');
       menu.waitForVisible('paper-listbox');
