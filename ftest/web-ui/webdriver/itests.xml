@@ -16,6 +16,7 @@
       <artifact:file key="org.nuxeo.web.ui:nuxeo-web-ui-marketplace::zip" />
       <artifact:file key="org.nuxeo.web.ui:nuxeo-web-ui-marketplace-itests::zip" />
     </copy>
+    <copy todir="${nuxeo.home}/nxserver/data" file="instance.clid" />
   </target>
 
   <target name="run-tests" depends="_init">
