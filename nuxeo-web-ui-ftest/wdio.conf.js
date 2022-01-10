@@ -123,7 +123,7 @@ exports.config = {
   sync: true,
   //
   // Level of logging verbosity: silent | verbose | command | data | result | error
-  logLevel: 'verbose',
+  logLevel: 'error',
   //
   // Enables colors for log output.
   coloredLogs: true,
@@ -197,7 +197,7 @@ exports.config = {
     backtrace: true,   // <boolean> show full backtrace for errors
     // compiler: ['js:babel-register'],       // <string[]> ("extension:module") require files with the given EXTENSION after requiring MODULE (repeatable)
     dryRun: false,      // <boolean> invoke formatters without executing steps
-    failFast: true,    // <boolean> abort the run on first failure
+    failFast: false,    // <boolean> abort the run on first failure
     colors: true,       // <boolean> disable colors in formatter output
     snippets: true,     // <boolean> hide step definition snippets for pending steps
     source: false,       // <boolean> hide source uris

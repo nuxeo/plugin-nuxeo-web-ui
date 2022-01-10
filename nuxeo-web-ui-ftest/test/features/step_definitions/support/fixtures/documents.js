@@ -1,3 +1,5 @@
+import chalk from 'chalk';
+
 import {
   After,
   Before,
@@ -5,6 +7,7 @@ import {
 import nuxeo, { BlobHelper } from '../services/client';
 
 global.liveDocuments = [];
+global.completeLiveDocuments = {};
 
 fixtures.documents = {
   init: (type = 'File', title = 'my document') => {
@@ -24,12 +27,14 @@ fixtures.documents = {
   },
   create: (parent, document) => nuxeo.repository().create(parent, document).then((doc) => {
     liveDocuments.push(doc.uid);
+    completeLiveDocuments[doc.uid] = doc;
     return doc;
   }),
   createWithAuthor: (parent, document, username) => nuxeo.repository()
     .create(parent, document)
     .then((doc) => {
       liveDocuments.push(doc.uid);
+      completeLiveDocuments[doc.uid] = doc;
       if (username) {
         return doc.set({
           'dc:creator': username,
@@ -100,6 +105,7 @@ fixtures.documents = {
       .then((docs) => {
         const doc = docs.entries[0];
         liveDocuments.push(doc.uid);
+        completeLiveDocuments[doc.uid] = doc;
         return doc;
       }));
   },
@@ -111,5 +117,22 @@ Before(function () {
 });
 
 After(() => Promise.all(liveDocuments
-  .map(docUid => nuxeo.repository().delete(docUid).catch(() => {}))) // eslint-disable-line arrow-body-style
+  .map(docUid => nuxeo.repository().delete(docUid).catch((error) => {
+    // console.log(chalk.red.inverse('###### ERROR HERE'));
+    console.error(chalk.red.inverse('###### ERROR HERE'));
+    console.error(chalk.red('Problematic document here...'));
+    console.error(chalk.red(error));
+    console.error(chalk.red(docUid));
+    console.error(chalk.green(JSON.stringify(completeLiveDocuments[docUid])));
+    // debugger;
+
+    // nuxeo.repository().fetch(docUid).then((problematicDoc) => {
+    //   console.error(chalk.red('Problematic document here...'));
+    //   console.error(JSON.stringify(problematicDoc));
+    // }).catch((e) => {
+    //   console.error(chalk.red('Couldnt get problematic document'));
+    //   console.error(chalk.red(e));
+    //   console.error(chalk.green(JSON.stringify(completeLiveDocuments[docUid])));
+    // });
+  }))) // eslint-disable-line arrow-body-style
   .then(() => { liveDocuments = []; }));
