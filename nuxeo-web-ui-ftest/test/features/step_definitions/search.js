@@ -100,7 +100,7 @@ Then('I can see that my saved search "{word}" on "{word}" is selected', function
   this.ui.searchForm(searchName).menuButton.waitForVisible();
   const el = this.ui.searchForm(searchName).getSavedSearch(savedSearchName);
   el.waitForExist().should.be.true;
-  el.getAttribute('class').should.equal('iron-selected');
+  browser.waitUntil(() => el.getAttribute('class') === 'iron-selected', 'expected saved search to be selected');
 });
 
 When(/^I clear the (.+) search on (.+)$/, function (searchType, searchName) {
