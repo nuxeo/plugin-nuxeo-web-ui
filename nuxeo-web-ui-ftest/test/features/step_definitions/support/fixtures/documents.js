@@ -110,6 +110,41 @@ Before(function () {
   return nuxeo.repository().fetch('/default-domain').then((doc) => { this.doc = doc; });
 });
 
-After(() => Promise.all(liveDocuments
-  .map(docUid => nuxeo.repository().delete(docUid).catch(() => {}))) // eslint-disable-line arrow-body-style
-  .then(() => { liveDocuments = []; }));
+function _retry(fn, retries = 3, interval = 100) {
+  return new Promise((resolve, reject) => fn()
+    .then(resolve)
+    .catch(
+      error => setTimeout(() => {
+        if (retries === 0) {
+          reject(error);
+          return;
+        }
+        _retry(fn, interval, --retries).then(resolve, reject);
+      }),
+      interval,
+    ),);
+}
+
+function reset() {
+  return Promise.all(
+    liveDocuments.reverse().map(docUid => _retry(() => nuxeo
+      .repository()
+      .delete(docUid)
+      .catch((e) => {
+        const { status, statusText, url } = e.response;
+        // eslint-disable-next-line no-console
+        console.error(`${status} ${statusText} ${url}`);
+        // in case of a conflict
+        if (status === 409) {
+          throw e; // let's retry this
+        }
+      }),),),
+  )
+    .then(() => {
+      liveDocuments = [];
+    })
+    // eslint-disable-next-line no-console
+    .catch(console.error);
+}
+
+After(reset);
