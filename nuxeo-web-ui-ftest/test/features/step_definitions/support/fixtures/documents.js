@@ -125,21 +125,24 @@ function _retry(fn, retries = 3, interval = 100) {
     ),);
 }
 
+function _sequencer(promises) {
+  return promises.reduce((current, next) => current.then(next), Promise.resolve([]));
+}
+
 function reset() {
-  return Promise.all(
-    liveDocuments.reverse().map(docUid => _retry(() => nuxeo
-      .repository()
-      .delete(docUid)
-      .catch((e) => {
-        const { status, statusText, url } = e.response;
-        // eslint-disable-next-line no-console
-        console.error(`${status} ${statusText} ${url}`);
-        // in case of a conflict
-        if (status === 409) {
-          throw e; // let's retry this
-        }
-      }),),),
-  )
+  const deletions = liveDocuments.reverse().map(docUid => () => _retry(() => nuxeo
+    .repository()
+    .delete(docUid)
+    .catch((e) => {
+      const { status, statusText, url } = e.response;
+      // eslint-disable-next-line no-console
+      console.error(`${status} ${statusText} ${url}`);
+      // in case of a conflict
+      if (status === 409) {
+        throw e;
+      }
+    })));
+  return _sequencer(deletions)
     .then(() => {
       liveDocuments = [];
     })
