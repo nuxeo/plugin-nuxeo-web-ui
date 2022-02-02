@@ -126,10 +126,15 @@ function _retry(fn, retries = 3, interval = 100) {
 }
 
 function _sequencer(promises) {
-  return promises.reduce((current, next) => current.then(next), Promise.resolve([]));
+  return promises.reduce((current, next) => current.then(next), Promise.resolve());
 }
 
+let nResets = 0;
+
 function reset() {
+  nResets++;
+  // eslint-disable-next-line no-console
+  console.log('started reset ', nResets);
   const deletions = liveDocuments.reverse().map(docUid => () => _retry(() => nuxeo
     .repository()
     .delete(docUid)
@@ -142,12 +147,15 @@ function reset() {
         throw e;
       }
     })));
-  return _sequencer(deletions)
+  const res = _sequencer(deletions)
     .then(() => {
       liveDocuments = [];
     })
     // eslint-disable-next-line no-console
     .catch(console.error);
+  // eslint-disable-next-line no-console
+  console.log('completed reset ', nResets);
+  return res;
 }
 
 After(reset);
