@@ -30,6 +30,7 @@ Given('user {string} exists', username => fixtures.users.create(
 ));
 
 When('I login as {string}', function (username) {
+  browser.pause(1000);
   const login = Login.get();
   login.username = username;
   login.password = users[username];
