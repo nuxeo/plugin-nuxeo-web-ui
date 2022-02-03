@@ -28,17 +28,24 @@ Given('user {string} exists', username => fixtures.users.create(
     },
   },
 ));
-
-When('I login as {string}', function (username) {
+/* eslint-disable no-console */
 When('I login as {string}', { wrapperOptions: { retry: 3 } }, function (username) {
   browser.pause(1000);
   const login = Login.get();
+  console.log('will set username');
   login.username = username;
+  console.log('username set');
+  console.log('will set password');
   login.password = users[username];
+  console.log('password set');
+  console.log('will submit login');
   login.submit();
+  console.log('login submitted');
   this.username = username;
   this.ui = UI.get();
+  console.log('will wait for nuxeo-page');
   driver.waitForVisible('nuxeo-page');
+  console.log('nuxeo-page loaded');
 });
 
 When(/^I visit (.*)$/, url => driver.url(url));
