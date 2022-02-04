@@ -130,31 +130,37 @@ function _sequencer(promises) {
 }
 
 let nResets = 0;
-
+/* eslint-disable no-console */
 function reset() {
   nResets++;
   // eslint-disable-next-line no-console
   console.log('started reset ', nResets);
-  const deletions = liveDocuments.reverse().map(docUid => () => _retry(() => nuxeo
-    .repository()
-    .delete(docUid)
-    .catch((e) => {
-      const { status, statusText, url } = e.response;
-      // eslint-disable-next-line no-console
-      console.error(`${status} ${statusText} ${url}`);
-      // in case of a conflict
-      if (status === 409) {
-        throw e;
-      }
-    })));
+  const deletions = liveDocuments.reverse().map((docUid, index) => () => _retry(() => {
+    console.log('deleting ', docUid, ' (', index, '/', liveDocuments.length, ')');
+    return nuxeo
+      .repository()
+      .delete(docUid)
+      .catch((e) => {
+        const { status, statusText, url } = e.response;
+        // eslint-disable-next-line no-console
+        console.error(`${status} ${statusText} ${url}`);
+        // in case of a conflict
+        if (status === 409) {
+          throw e;
+        }
+      });
+  }));
   const res = _sequencer(deletions)
     .then(() => {
       liveDocuments = [];
+      console.log('completed reset ', nResets);
     })
     // eslint-disable-next-line no-console
-    .catch(console.error);
+    .catch((e) => {
+      console.error(e);
+      console.log('failed reset ', nResets);
+    });
   // eslint-disable-next-line no-console
-  console.log('completed reset ', nResets);
   return res;
 }
 
