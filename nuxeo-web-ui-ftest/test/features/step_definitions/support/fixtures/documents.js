@@ -119,7 +119,7 @@ function _retry(fn, retries = 3, interval = 100) {
           reject(error);
           return;
         }
-        _retry(fn, interval, --retries).then(resolve, reject);
+        _retry(fn, --retries, interval).then(resolve, reject);
       }),
       interval,
     ),);
