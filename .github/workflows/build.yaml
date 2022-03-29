@@ -1,0 +1,60 @@
+name: Build
+
+on:
+  push:
+    branches:
+      - 2.4_10.10
+  pull_request:
+    branches:
+      - 2.4_10.10
+
+env:
+  HF_VERSION: 56
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: '10'
+
+      - uses: actions/setup-java@v2
+        with:
+          distribution: 'adopt'
+          java-version: '8'
+
+      - name: Update settings.xml with server configuration
+        run: |
+          echo '<settings>
+              <servers>
+                <server>
+                  <id>maven-internal</id>
+                  <username>${{ secrets.PACKAGES_AUTH_USER }}</username>
+                  <password>${{ secrets.PACKAGES_AUTH_TOKEN }}</password>
+                </server>
+              </servers>
+              </settings>' > ~/.m2/settings.xml
+
+      - name: Update plugin-nuxeo-web-ui SNAPSHOT version with sed
+        run: |
+          grep -rl '10.10-HF[0-9]\{2\}-SNAPSHOT' . --exclude-dir={.git,node_modules,bower_components} --include=pom.xml | xargs sed -i 's/10.10-HF[0-9]\{2\}-SNAPSHOT/10.10-HF${{ env.HF_VERSION }}/g'
+          grep -rl '2.4.[0-9]\{2\}-SNAPSHOT' . --exclude-dir={.git,node_modules,bower_components} --include={pom.xml,package.json} | xargs sed -i 's/2.4.[0-9]\{2\}-SNAPSHOT/2.4.${{ env.HF_VERSION }}/g'
+
+      - name: Install nuxeo-web-ui-ftest
+        run: |
+          pushd nuxeo-web-ui-ftest
+          npm install
+          popd
+
+      - name: Lint nuxeo-web-ui-ftest
+        run: |
+          pushd nuxeo-web-ui-ftest
+          npm run lint
+          popd
+
+      - name: Build
+        run: mvn install -ntp -DskipTests
