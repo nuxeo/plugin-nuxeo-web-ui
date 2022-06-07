@@ -184,7 +184,11 @@ Then(/^I can edit the (.*) Note$/, function (format) {
         const xmlContent = page.view.preview.element('#xml');
         xmlContent.waitForVisible();
         xmlContent.getText().should.equal(newContent);
-      } else if (format === 'Markdown' || format === 'Text') {
+      } else if (format === 'Text') {
+        const plainContent = page.view.preview.element('#plain');
+        plainContent.waitForVisible();
+        plainContent.getText().should.equal(newContent);
+      } else if (format === 'Markdown') {
         page.view.preview.waitForVisible('marked-element #content');
         const markedContent = page.view.preview.element('marked-element #content');
         markedContent.waitForVisible();
