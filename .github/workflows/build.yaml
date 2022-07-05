@@ -9,7 +9,7 @@ on:
       - 2.4_10.10
 
 env:
-  HF_VERSION: 59
+  HF_VERSION: 62
 
 jobs:
   build:
